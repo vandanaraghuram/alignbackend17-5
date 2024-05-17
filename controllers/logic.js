@@ -1,6 +1,8 @@
 const admins= require("../models/adminCollection")
 const works=require("../models/works")
 const quotes=require("../models/quotes")
+const jwt=require('jsonwebtoken')
+
 
 
 
@@ -50,7 +52,13 @@ const adminLogin=async (req,res)=>{
         else{
            const login=await admins.findOne({email,psw})
             if(login){
-                res.status(200).json(login)
+               var token=jwt.sign({email},"secretkey1234")
+                res.status(200).json({
+                email:login.email,
+                psw:login.psw,
+                token
+               })
+            
             }
             else{
                 res.status(400).json("Invalid email or password")
